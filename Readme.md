@@ -80,7 +80,4 @@ The Laravel Fuzzy Search package is open-sourced software licensed under the MIT
 
 - **Fillable Array**: This is just an example. Replace or remove the `$fillable` property based on your actual model requirements.
 - **Searchable Attributes**: Adapt the `protected $searchable_attributes` array to match the specific attributes you wish to make searchable in your models.
-- **GitHub Links**: Ensure the GitHub URL (`https://github.com/soliyer/laravel-fuzzy-search`) and contributors link are correct and point to your actual repository.
-- **License File**: The `[MIT license](LICENSE.md)` link assumes you have a `LICENSE.md` file in your repository. Make sure to include this file, replacing `MIT` with your chosen license if different.
-
 
