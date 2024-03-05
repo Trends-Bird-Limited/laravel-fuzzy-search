@@ -55,6 +55,11 @@ protected $searchable_attributes = [
 
 ```
 
+### Key Points:
+
+- **Fillable Array**: This is just an example. Replace or remove the `$fillable` property based on your actual model requirements.
+- **Searchable Attributes**: Adapt the `protected $searchable_attributes` array to match the specific attributes you wish to make searchable in your models.
+
 Then, performing a fuzzy search will include these concatenated fields in the search criteria.
 
 ## Advanced Usage
@@ -74,10 +79,4 @@ Special thanks to all contributors who participated in the development of this p
 
 ## License
 The Laravel Fuzzy Search package is open-sourced software licensed under the MIT license.
-
-
-### Key Points:
-
-- **Fillable Array**: This is just an example. Replace or remove the `$fillable` property based on your actual model requirements.
-- **Searchable Attributes**: Adapt the `protected $searchable_attributes` array to match the specific attributes you wish to make searchable in your models.
 
