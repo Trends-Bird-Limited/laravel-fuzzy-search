@@ -20,41 +20,29 @@ trait FuzzySearchable
     {
         $columns = property_exists($this, 'searchable_attributes') ? $this->searchable_attributes : [];
 
-        // Log::info('🔍 FuzzySearch started', ['term' => $term, 'columns' => $columns]);
-
         if (empty($columns)) {
-            // Log::warning('⚠️ No searchable_attributes defined.');
             return $query;
         }
 
-        $search_term = '%' . $term . '%';
+        $searchTerm = '%' . $term . '%';
 
-        return $query->where(function (Builder $query) use ($columns, $search_term) {
+        return $query->where(function (Builder $query) use ($columns, $searchTerm) {
             foreach ($columns as $column) {
                 if (is_array($column)) {
-                    // Build CONCAT string manually without DB::raw in reduce
-                    $concat_fields = collect($column)
+                    $concatFields = collect($column)
                         ->map(fn($field) => "IFNULL($field, '')")
-                        ->reduce(fn($carry, $field) => $carry === null ? $field : "CONCAT($carry, ' ', $field)", null);
+                        ->implode(", ' ', ");
 
-                    // Log::info('🔗 Searching CONCAT fields', ['fields' => $column, 'sql' => $concat_fields]);
-
-                    // Use orWhereRaw to inject the raw SQL condition
-                    $query->orWhereRaw("$concat_fields LIKE ?", [$search_term]);
+                    $query->orWhereRaw("CONCAT($concatFields) LIKE ?", [$searchTerm]);
                 } elseif (str_contains($column, '.')) {
                     [$relation, $field] = explode('.', $column);
-                    // Log::info('📎 Searching nested relation', ['relation' => $relation, 'field' => $field]);
-
-                    $query->orWhereHas($relation, function ($q) use ($field, $search_term) {
-                        // Log::info('➡️ orWhereHas called inside relation', ['field' => $field]);
-                        $q->where($field, 'LIKE', $search_term);
-                    });
+                    $query->orWhereHas($relation, fn($q) => $q->where($field, 'LIKE', $searchTerm));
                 } else {
-                    // Log::info('📄 Searching direct column', ['column' => $column]);
-                    $query->orWhere($column, 'LIKE', $search_term);
+                    $query->orWhere($column, 'LIKE', $searchTerm);
                 }
             }
         });
+    
     }
     // public function scopeFuzzySearch(Builder $query, string $term): Builder
     // {
